@@ -9,7 +9,7 @@ node ('master'){
 	sh 'curl -s  http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project > /var/tmp/json.out'
 	def inputFile = new File("/var/tmp/json.out");
 	def InputJSON = new  groovy.json.JsonSlurper().parseText(inputFile.text);
-	List b = InputJSON.id ;
+//	List b = InputJSON.id ;
 	println(b);
 	Collections.sort(b);
 	def STORY_ID=b.last();
