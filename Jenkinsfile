@@ -2,6 +2,7 @@ import groovy.json.JsonSlurper;
 import java.util.*;
 import java.io.*;
 node ('master'){
+	ws {
     stage 'Feature Branch Creation'
 	
 	// Getting the project ID from the JIRA API
@@ -58,4 +59,5 @@ node ('master'){
 	}
 }'''
     
+}
 }
