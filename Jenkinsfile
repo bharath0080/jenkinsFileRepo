@@ -9,7 +9,7 @@ node ('master'){
 	
 	// Getting the project ID from the JIRA API
 	load '../workspace@script/propertiesFile'
-	sh 'curl -s  $JIRA_API > /var/tmp/json.out'
+	sh 'curl -s  http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project > /var/tmp/json.out'
 	def inputFile = new File("/var/tmp/json.out");
 	def InputJSON = new  groovy.json.JsonSlurper().parseText(inputFile.text);
 	def b = InputJSON.id ;
