@@ -6,6 +6,7 @@ node ('master'){
 	
 	// Getting the project ID from the JIRA API
 	load '$WORKSPACE/propertiesFile'
+	sandbox()
 	sh 'curl -s  $JIRA_API > /var/tmp/json.out'
 	def inputFile = new File("/var/tmp/json.out");
 	def InputJSON = new  groovy.json.JsonSlurper().parseText(inputFile.text);
