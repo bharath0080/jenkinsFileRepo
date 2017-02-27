@@ -5,7 +5,7 @@ node ('master'){
     stage 'Feature Branch Creation'
 	
 	// Getting the project ID from the JIRA API
-	load 'propertiesFile'
+	load '${workspace}@script/propertiesFile'
 	sh 'curl -s  $JIRA_API > /var/tmp/json.out'
 	def inputFile = new File("/var/tmp/json.out");
 	def InputJSON = new  groovy.json.JsonSlurper().parseText(inputFile.text);
