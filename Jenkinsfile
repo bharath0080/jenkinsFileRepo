@@ -14,7 +14,7 @@ node ('master'){
 
 	// Script execution for branch creation in GITHUB
 	
-	sh 'mv  $WORKSPACE/variable.properties /var/tmp/variable.properties;$WORKSPACE/gitBranch.sh branchCreation '
+	sh 'mv  $WORKSPACE/variable.properties /var/tmp/variable.properties;../workspace@script/gitBranch.sh branchCreation '
 	def story_id_file = readFile('/var/tmp/variable.properties');
 	String[] str = story_id_file.split('=');
 	def STORY_ID=str[1].replaceAll("\\s","");
