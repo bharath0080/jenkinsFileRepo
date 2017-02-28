@@ -6,6 +6,8 @@ node ('master'){
 	
 	// Getting the project ID from the JIRA API
 	load '../workspace@script/propertiesFile'
+	sh 'mkdir -p output; cp ../workspace@script/gitBranch.sh output/'
+	stash name : "snapshot-warfile", includes : "output/*"
 	def JIRA=JIRA_API;
 	println(JIRA);
 	sh "curl -s $JIRA > /var/tmp/json.out";
@@ -38,8 +40,8 @@ node ('master'){
 			git poll: true, url: \''''+GITHUB_URL+'''\', branch: \''''+branchName+'''\'
 			
 			// Build and test of feature branch code 
-			
-			sh \'$WORKSPACE/gitBranch.sh build \'
+			unstash "snapshot-warfile"	
+			sh \'output/gitBranch.sh build \'
 			
 		}
 	stage \'Pull Request Approval\'
@@ -52,7 +54,8 @@ node ('master'){
 	        return
     }
         node(\'master\') {
-			sh \'$WORKSPACE/gitBranch.sh mergeApproval\'
+			unstash "snapshot-warfile"
+			sh \'outpu/gitBranch.sh mergeApproval\'
 	}
 	
 	\'\'\'.stripIndent().trim())  
