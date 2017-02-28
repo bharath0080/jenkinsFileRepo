@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 . /var/tmp/variable.properties 
 export http_proxy=http://600877:Bh%40rath0008@proxy.cognizant.com:6050;
 export https_proxy=https://600877:Bh%40rath0008@proxy.cognizant.com:6050;
@@ -25,3 +26,4 @@ else
 	echo "Accepted arguments are branchCreation/build/mergeApproval";
 	exit 1;
 fi
+set +x
