@@ -7,7 +7,6 @@ node ('master'){
 	// Getting the project ID from the JIRA API
 	load '../workspace@script/propertiesFile'
 	sh 'mkdir -p output; cp ../workspace@script/gitBranch.sh output/'
-	stash name : "snapshot-warfile", includes : "output/*"
 	def JIRA=JIRA_API;
 	println(JIRA);
 	sh "curl -s $JIRA > /var/tmp/json.out";
