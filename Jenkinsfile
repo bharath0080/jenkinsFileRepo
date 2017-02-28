@@ -8,6 +8,7 @@ node ('master'){
 	load '../workspace@script/propertiesFile'
 	def JIRA=JIRA_API;
 	println(JIRA);
+	sh "echo $JIRA";
 	sh '''
         #curl -s  http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project > /var/tmp/json.out;
         curl -s  "${JIRA}" > /var/tmp/json.out;
