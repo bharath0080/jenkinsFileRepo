@@ -40,8 +40,7 @@ node ('master'){
 			git poll: true, url: \''''+GITHUB_URL+'''\', branch: \''''+branchName+'''\'
 			
 			// Build and test of feature branch code 
-			unstash "snapshot-warfile"	
-			sh \'output/gitBranch.sh build \'
+			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=${SONAR_URL} -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=${SONAR_USER} -Dsonar.password=${SONAR_PASS}"
 			
 		}
 	stage \'Pull Request Approval\'
