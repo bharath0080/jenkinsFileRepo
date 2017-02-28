@@ -6,8 +6,10 @@ node ('master'){
 	
 	// Getting the project ID from the JIRA API
 	load '../workspace@script/propertiesFile'
+	def JIRA_API=JIRA_API;
 	sh '''
-        curl -s  http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project > /var/tmp/json.out;
+        #curl -s  http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project > /var/tmp/json.out;
+        curl -s  "$JIRA_API" > /var/tmp/json.out;
         STORY_ID=`cat /var/tmp/json.out | awk -v k="id" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' |  grep -w id | awk -F: '{print $2}' | sed 's/\"//g' | sort | tail -1`;
         echo "STORY_ID=$STORY_ID" > variable.properties;
         '''	
