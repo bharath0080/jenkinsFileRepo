@@ -38,7 +38,7 @@ node ('master'){
 			def SONAR_URI = "'''+SONAR_URL+'''"
 			def SONAR_PASS = "'''+SONAR_USER_PASSWORD+'''"	
 			// Build and test of feature branch code 
-			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_USER -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USER -Dsonar.password=$SONAR_PASS"
+			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_URI -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USER -Dsonar.password=$SONAR_PASS"
 			
 		}
 	stage \'Pull Request Approval\'
