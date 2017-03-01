@@ -34,12 +34,11 @@ node ('master'){
 		node(\'HANOVER_docker\') {
 			stage \'Build for feature branch\'
 			git poll: true, url: \''''+GITHUB_URL+'''\', branch: \''''+branchName+'''\'
-			
+			def SONAR_USER = "'''+SONAR_USER_NAME+'''";
+			def SONAR_URI = "'''+SONAR_URL+'''"
+			def SONAR_PASS = "'''+SONAR_USER_PASSWORD+'''"	
 			// Build and test of feature branch code 
-                        def SONAR_USR=SONAR_USER;
-                        def SONAR_PAS=SONAR_PASS;
-                        def SONAR_URI=SONAR_URL;
-			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_URI -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USR -Dsonar.password=$SONAR_PAS"
+			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_USER -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USER -Dsonar.password=$SONAR_PASS"
 			
 		}
 	stage \'Pull Request Approval\'
@@ -52,7 +51,6 @@ node ('master'){
 	        return
     }
         node(\'master\') {
-			unstash "snapshot-warfile"
 			sh \'outpu/gitBranch.sh mergeApproval\'
 	}
 	
