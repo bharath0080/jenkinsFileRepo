@@ -1,5 +1,5 @@
 JIRA_API="http://bharath0008:Bh%40rath0008@10.242.138.107:9000/rest/api/2/project"
 GITHUB_URL="https://github.com/Rajeshkumar90/jpetStore.git"
-SONAR_USER_NAME=admin
-SONAR_USER_PASSWORD=admin
+SONAR_USER_NAME="admin"
+SONAR_USER_PASSWORD="admin"
 SONAR_URI="http://10.242.138.71:9000"
