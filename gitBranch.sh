@@ -9,12 +9,6 @@ then
         SHA_ID=`curl -s  https://api.github.com/repos/Rajeshkumar90/jpetStore/commits/master | grep sha | head -1 | awk -F":" '{print $2}'| sed -e 's/"//g' -e 's/,//g' -e 's/,//g' -e 's/ //g'`;
         curl -X POST -u "Rajeshkumar90:81b159d2d193e425dd689511c41786695201c080" -d "{\"ref\": \"refs/heads/${STORY_ID}_branch\",\"sha\":\"$SHA_ID\"}" "https://api.github.com/repos/Rajeshkumar90/jpetStore/git/refs"
 
-elif [ $1 == "build" ]
-then
-        echo "Maven build execution for the feature branch";
-        sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=http://10.242.138.71:9000 -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=admin -Dsonar.password=admin;
-
-
 elif [ $1 == "mergeApproval" ]
 then
         echo "Creating the pull request for merging the code from ${STORY_ID}_branch to master";
@@ -22,6 +16,6 @@ then
 
 else
         echo "No valid argument is provided";
-        echo "Accepted arguments are branchCreation/build/mergeApproval";
+        echo "Accepted arguments are branchCreation/mergeApproval";
         exit 1;
 fi
