@@ -1,0 +1,47 @@
+node('HANOVER_docker') {
+    stage 'Build for master branch after merge from feature branch'
+	    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'MessageExclusion', excludedMessage: '(?s).*maven-release-plugin.*']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/Rajeshkumar90/jpetStore.git']]])
+		
+		sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=http://10.242.138.71:9000 -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=admin -Dsonar.password=admin deploy"
+		sh "mkdir -p output;cd /home/jenkins/.m2/repository/org/mybatis/jpetStore/; cd `ls -trd *-SNAPSHOT | tail -1`;pwd; cp *.war $WORKSPACE/output;ls $WORKSPACE/output/*.war"
+		stash name : "snapshot-warfile", includes : "output/*"
+		sh "rm -rf $WORKSPACE/output/*"
+}
+
+node('master') {
+    stage 'Publishing the artifacts to udeploy'
+    sh "rm -rf /home/jenkins/jobs/pipeline/workspace/output"
+    unstash "snapshot-warfile"
+    sh "sleep 5"
+   step([$class: 'UCDeployPublisher',
+        siteName: 'udeploy-server',
+        component: [
+            $class: 'com.urbancode.jenkins.plugins.ucdeploy.VersionHelper$VersionBlock',
+            componentName: 'Han_Over_Docker_Comp',
+			componentTag:  'JENKINS_TAG',
+            delivery: [
+                $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeliveryHelper$Push',
+                pushVersion: '${BUILD_NUMBER}',
+                baseDir: "${WORKSPACE}/output",
+                fileIncludePatterns: '*.war',
+                fileExcludePatterns: '',
+                pushDescription: 'Pushed from Jenkins',
+                pushIncremental: false
+            ]
+        ]
+    ])
+    sh "sleep 10"
+    stage 'Deploying the artifacts via udeploy'
+   step([$class: 'UCDeployPublisher',
+        siteName: 'udeploy-server',
+        deploy: [
+            $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeployHelper$DeployBlock',
+            deployApp: 'HanOver_app',
+            deployEnv: 'Development',
+            deployProc: 'hanOver_app_process',
+            deployVersions: 'Han_Over_Docker_Comp:${BUILD_NUMBER}',
+            deployOnlyChanged: false
+        ]
+    ])
+    
+}
