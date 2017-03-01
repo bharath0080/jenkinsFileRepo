@@ -18,8 +18,8 @@ then
 	
 elif [ $1 == "mergeApproval" ]	
 then
-	echo "Creating the pull request for merging the code from "\\${STORY_ID}\\"_branch to master";
-	curl -s -X POST -u Rajeshkumar90:79d7b6002ccca84a36728087a789f043f4ef895e -k -d \'{\\"title\\": "Changes for \'\\"${STORY_ID}\\"\' project feature",\\"head\\": \\"\'\\"${STORY_ID}\\"\'_branch\\",\\"base\\": \\"master\\"}\' \\"https://api.github.com/repos/Rajeshkumar90/jpetStore/pulls\\" ;	
+	echo "Creating the pull request for merging the code from ${STORY_ID}_branch to master";
+	curl -X POST -u Rajeshkumar90:79d7b6002ccca84a36728087a789f043f4ef895e -k -d '{"title": "Changes for '"${STORY_ID}"' project feature","head": "'"${STORY_ID}"'_branch","base": "master"}' "https://api.github.com/repos/Rajeshkumar90/jpetStore/pulls"
 
 else
 	echo "No valid argument is provided";
