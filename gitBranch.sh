@@ -17,5 +17,5 @@ then
 else
         echo "No valid argument is provided";
         echo "Accepted arguments are branchCreation/mergeApproval";
-        exit 1;
+        exit 1; 
 fi
