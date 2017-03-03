@@ -20,7 +20,7 @@ node ('master'){
 	def STORY_ID=str[1].replaceAll("\\s","");
 	def jobname=STORY_ID+"_job_setup"
 	def branchName=STORY_ID+"_branch"
-	stage 'Feature Branch build job and pull request approval creation'
+	stage 'Feature Branch build job creation'
 	
 	// Job DSL script for creating job with project ID that was created in JIRA
 	
