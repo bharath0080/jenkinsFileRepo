@@ -30,6 +30,7 @@ node ('master'){
 			}
     definition {
     cps {
+    sandbox()
     script(\'\'\'
 		node(\'HANOVER_docker\') {
 			stage \'Build for feature branch\'
