@@ -47,8 +47,11 @@ node ('master'){
                 }
         }
 	}'''
-	jobDsl scriptText: '''job(\'Merge Approval Job\') {
-		label 'master';
+	jobDsl scriptText: '''job(\''''+STORY_ID+'''_Merge_Approval_Job\') {
+		label 'master'
+		parameters {
+			stringParam 'STORY_ID', "'''+STORY_ID+'''", ""
+		}
 		steps{
 			shell('/var/tmp/gitBranch.sh mergeApproval')	
 		} 
