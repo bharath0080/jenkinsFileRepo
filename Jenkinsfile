@@ -26,7 +26,7 @@ node ('master'){
 
 	jobDsl scriptText: '''pipelineJob(\''''+jobname+'''\') {
 	triggers {
-		scm \'H/5 * * * *\'
+		scm \'* * * * *\'
 		}
 	definition {
 	cps {
