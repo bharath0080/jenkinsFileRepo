@@ -24,28 +24,28 @@ node ('master'){
 
         // Job DSL script for creating job with project ID that was created in JIRA
 
-    jobDsl scriptText: '''pipelineJob(\''''+jobname+'''\') {
-        triggers {
-            scm \'H/5 * * * *\'
-                        }
-    definition {
-    cps {
-    sandbox()
-    script(\'\'\'
-                node(\'HANOVER_docker\') {
-                        stage \'Build for feature branch\'
-                        git poll: true, url: \''''+GITHUB_URL+'''\', branch: \''''+branchName+'''\'
-                        def SONAR_USER = "'''+SONAR_USER_NAME+'''";
-                        def SONAR_URI = "'''+SONAR_URL+'''"
-                        def SONAR_PASS = "'''+SONAR_USER_PASSWORD+'''"
-                        // Build and test of feature branch code
-                        sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_URI -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USER -Dsonar.password=$SONAR_PASS"
+	jobDsl scriptText: '''pipelineJob(\''''+jobname+'''\') {
+	triggers {
+		scm \'H/5 * * * *\'
+		}
+	definition {
+	cps {
+	sandbox()
+	script(\'\'\'
+		node(\'HANOVER_docker\') {
+			stage \'Build for feature branch\'
+			git poll: true, url: \''''+GITHUB_URL+'''\', branch: \''''+branchName+'''\'
+			def SONAR_USER = "'''+SONAR_USER_NAME+'''";
+			def SONAR_URI = "'''+SONAR_URL+'''"
+			def SONAR_PASS = "'''+SONAR_USER_PASSWORD+'''"
+			// Build and test of feature branch code
+			sh "sudo mvn clean install  -Djacoco.skip=true cobertura:cobertura -Dcobertura.report.format=xml sonar:sonar -Dsonar.junit.reportsPath=target/surefire-reports -Dsonar.host.url=$SONAR_URI -Dsonar.projectName=$JOB_NAME -Dsonar.cobertura.reportPath=target/site/cobertura/coverage.xml -Dsonar.login=$SONAR_USER -Dsonar.password=$SONAR_PASS"
 
-                }
+		}
 
-        \'\'\'.stripIndent().trim())
-                }
-        }
+	\'\'\'.stripIndent().trim())
+	}
+	}
 	}'''
 	jobDsl scriptText: '''job(\''''+STORY_ID+'''_Merge_Approval_Job\') {
 		label 'master'
