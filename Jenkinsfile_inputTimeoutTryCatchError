@@ -1,0 +1,62 @@
+node  {
+	stage 'SCM'
+	sh 'echo SCM built successfully'
+	stage 'Build'
+	sh 'echo Build built successfully'
+	stage 'Analysis'
+	sh 'echo Build Analysis successfully'				
+	stage 'CF push'
+	sh 'echo CF push Analysis successfully'				
+	stage 'Test'
+	try {
+		sh "echooooooooo test suite is completed"
+	}catch(err) {
+		try {
+			timeout(time: 15, unit: 'SECONDS') {
+				public def userInput = input(id: 'UserInput', message: 'Approval ', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'Yes', description: 'Approval', name: 'Approval']])
+				env.ENV = userInput
+			}
+		} catch (err1) {
+			CF_app()
+			return
+		}
+		if ( env.ENV  == "Yes") {
+			CF_app()
+			return
+		} else {	
+			error  'Test cases failed,hence failing the build'
+		}	
+	} 
+	CF_app()
+}
+
+stage 'Approval'
+public def userInput1 = input(id: 'UserInput', message: 'Approval ', parameters: [[$class: 'TextParameterDefinition', defaultValue: 'Yes', description: 'Approval', name: 'Approval']])
+
+if(userInput1 == "Yes")
+{
+	node {
+		stage 'Promote'
+		parallel (CloudFoundry_push_to_QA: {
+			sh "echo Successfully pushed to QA env"
+			build job: 'Deploy to QA'
+			}, Cloud_Foundry_push_to_UAT: {
+			sh "echo Successfully pushed to UAT env"
+			build job: 'Deploy to UAT'
+			}, Cloud_Foundry_push_to_INT: {
+			sh "echo Successfully pushed to INT env"
+			build job: 'Deploy to INT'
+		})
+	}
+} else {
+	currentBuild.result = 'FAILURE'
+}
+	
+def CF_app() {
+	stage 'Map route'
+	sh "echo Mapped the route"
+	stage 'Unmap route'
+	sh "echo Unmapped the route"
+	stage 'Delete app'
+	sh "echo Deleted the app"
+}
