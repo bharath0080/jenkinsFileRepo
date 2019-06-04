@@ -1,7 +1,7 @@
 #!/bin/bash
 . /var/tmp/variable.properties
-export http_proxy=http://600877:Bh%40rath0008@proxy.cognizant.com:6050;
-export https_proxy=https://600877:Bh%40rath0008@proxy.cognizant.com:6050;
+export http_proxy=<proxyName>
+export https_proxy=<proxyName>
 
 if [ $1 == "branchCreation" ]
 then
